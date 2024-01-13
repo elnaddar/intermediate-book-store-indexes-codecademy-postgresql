@@ -20,3 +20,25 @@ WHERE quantity > 18;
 EXPLAIN ANALYZE SELECT customer_id, quantity
 FROM orders
 WHERE quantity > 18;
+
+-- # Primary Key
+-- At the start of the project, you were asked if you could find what index was missing. You may have noticed that the customers table is missing a primary key, and therefore its accompanying index. Let’s create that primary key now.
+-- To check the effectiveness of this index, write a query that uses a WHERE clause targeting the primary key field. Run this query before and after creating the index. You can add EXPLAIN ANALYZE to these queries to see how long they take with and without the index. Make sure that these two queries are identical — you want to make sure you’re using the same measuring stick before and after the index is created.
+
+
+-- Seq Scan on customers  (cost=0.00..2626.00 rows=1 width=76) (actual time=19.157..20.129 rows=1 loops=1)
+-- Planning Time: 0.087 ms
+-- Execution Time: 20.149 ms
+EXPLAIN ANALYZE SELECT *
+FROM customers
+WHERE "customer_id" = 5000;
+
+ALTER TABLE customers
+ADD PRIMARY KEY(customer_id);
+
+-- Index Scan using customers_pkey on customers  (cost=0.29..8.31 rows=1 width=76) (actual time=0.043..0.046 rows=1 loops=1)
+-- Planning Time: 0.270 ms
+-- Execution Time: 0.096 ms
+EXPLAIN ANALYZE SELECT *
+FROM customers
+WHERE "customer_id" = 5000;
