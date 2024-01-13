@@ -73,3 +73,8 @@ EXPLAIN ANALYZE
 SELECT "customer_id", "book_id", quantity
 FROM orders
 WHERE quantity > 18;
+
+-- # Combining Indexes
+-- Recall the two indexes we investigated at the start of this project. They were built to try and improve the book overview page that allows users to search for a book by author or title. However, these searches are taking longer than you think they should. You already have indexes on the two main search criteria, author and title. What else could you do to improve the runtime (hint, you will be creating an index)?
+CREATE INDEX books_author_title_idx
+ON books(author, title);
