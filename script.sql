@@ -56,3 +56,20 @@ SELECT * FROM customers LIMIT 10;
 -- Regular searches are done on the combination of customer_id and book_id on the orders table. You have determined (through testing) that this would be a good candidate to build a multicolumn index on. Let’s build this index!
 CREATE INDEX orders_customer_id_book_id_idx
 ON orders(customer_id, book_id);
+
+-- You notice that your queries using the index you just built are also regularly asking for the quantity ordered as well.Drop your previous index and recreate it to improve it for this new information.
+-- Don’t forget you can test your query before and after creation to see its impact.
+
+EXPLAIN ANALYZE
+SELECT "customer_id", "book_id", quantity
+FROM orders
+WHERE quantity > 18;
+
+DROP INDEX orders_customer_id_book_id_idx;
+CREATE INDEX orders_customer_id_book_id_quantity_idx
+ON orders(customer_id, book_id, quantity);
+
+EXPLAIN ANALYZE
+SELECT "customer_id", "book_id", quantity
+FROM orders
+WHERE quantity > 18;
