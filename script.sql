@@ -2,3 +2,11 @@
 SELECT *
 FROM pg_indexes
 WHERE tablename IN ('books', 'customers', 'orders');
+
+-- # Partial Index
+-- Your marketing team reaches out to you to request regular information on sales figures, but they are only interested in sales of greater than 18 units sold in an order to see if there would be a benefit in targeted marketing. They will need the customer_ids, and quantity ordered.
+
+-- Perform an EXPLAIN ANALYZE when doing the SELECT function to get the information WHERE quantity > 18. Take note of how long this select statement took without an index.
+EXPLAIN ANALYZE SELECT customer_id, quantity
+FROM orders
+WHERE quantity > 18;
