@@ -15,3 +15,8 @@ WHERE quantity > 18;
 CREATE INDEX orders_customer_id_quantity_gt_18_idx
 ON orders(customer_id, quantity)
 WHERE quantity > 18;
+
+-- Don’t forget to always verify that your index is doing what you are trying to accomplish. Write your EXPLAIN ANALYZE query again, this time after your new index to compare the before and after of the impact of this query. Can you explain the change? As more orders are placed, would this difference become greater or less noticeable?
+EXPLAIN ANALYZE SELECT customer_id, quantity
+FROM orders
+WHERE quantity > 18;
