@@ -42,3 +42,11 @@ ADD PRIMARY KEY(customer_id);
 EXPLAIN ANALYZE SELECT *
 FROM customers
 WHERE "customer_id" = 5000;
+
+-- You might have noticed that when you got the top 10 records from the customers table that they weren’t in numerical order by customer_id. This was intentionally done to simulate a system that has experienced updates, deletes, inserts from a live system. Use your new primary key to fix this so the system is ordered in the database physically by customer_id.
+-- To verify this worked, you can query the first 10 rows of the customers table again to see the table organized by the primary key.
+SELECT * FROM customers LIMIT 10;
+
+CLUSTER customers USING customers_pkey;
+
+SELECT * FROM customers LIMIT 10;
