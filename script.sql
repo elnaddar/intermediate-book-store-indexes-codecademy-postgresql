@@ -10,3 +10,8 @@ WHERE tablename IN ('books', 'customers', 'orders');
 EXPLAIN ANALYZE SELECT customer_id, quantity
 FROM orders
 WHERE quantity > 18;
+
+-- Because we know they are only ever interested in orders where specifically more than 18 books were ordered we can build an index to improve the search time for this specific query.
+CREATE INDEX orders_customer_id_quantity_gt_18_idx
+ON orders(customer_id, quantity)
+WHERE quantity > 18;
