@@ -82,13 +82,24 @@ ON books(author, title);
 -- # An Ounce of Prevention is worth a Pound of Cure
 -- You notice the order history page taking longer than you would like for customer experiences. After some research, you notice the largest amount of time is spent calculating the total price the customer spent on each order. Let us set up a test. Write an EXPLAIN ANALYZE when looking for all the information on all orders where the total price (quantity * price_base) is over 100.
 
--- Seq Scan on orders  (cost=0.00..2268.00 rows=100000 width=62) (actual time=0.087..129.922 rows=100000 loops=1)
--- Planning Time: 0.395 ms
--- Execution Time: 137.263 ms
+-- Seq Scan on orders  (cost=0.00..2684.66 rows=33333 width=62) (actual time=0.129..150.605 rows=68070 loops=1)
+-- Planning Time: 0.466 ms
+-- Execution Time: 155.491 ms
 EXPLAIN ANALYZE
 SELECT *, (quantity * "price_base") AS "total price"
-FROM orders;
+FROM orders
+WHERE (quantity * "price_base") > 100;
 
 -- Create an index to speed this query up (recall, total price is quantity * price_base).
 CREATE INDEX orders_total_price_idx
 ON orders((quantity * price_base));
+
+-- You know what to do — investigate if your index has helped. Run your EXPLAIN ANALYZE again after your index is completed and compare the planning and execution times to see if this will help in this situation.
+
+-- ->  Bitmap Index Scan on orders_total_price_idx  (cost=0.00..622.41 rows=33333 width=0) (actual time=29.857..29.858 rows=68070 loops=1)
+-- Planning Time: 0.391 ms
+-- Execution Time: 98.767 ms
+EXPLAIN ANALYZE
+SELECT *, (quantity * "price_base") AS "total price"
+FROM orders
+WHERE (quantity * "price_base") > 100;
