@@ -78,3 +78,13 @@ WHERE quantity > 18;
 -- Recall the two indexes we investigated at the start of this project. They were built to try and improve the book overview page that allows users to search for a book by author or title. However, these searches are taking longer than you think they should. You already have indexes on the two main search criteria, author and title. What else could you do to improve the runtime (hint, you will be creating an index)?
 CREATE INDEX books_author_title_idx
 ON books(author, title);
+
+-- # An Ounce of Prevention is worth a Pound of Cure
+-- You notice the order history page taking longer than you would like for customer experiences. After some research, you notice the largest amount of time is spent calculating the total price the customer spent on each order. Let us set up a test. Write an EXPLAIN ANALYZE when looking for all the information on all orders where the total price (quantity * price_base) is over 100.
+
+-- Seq Scan on orders  (cost=0.00..2268.00 rows=100000 width=62) (actual time=0.087..129.922 rows=100000 loops=1)
+-- Planning Time: 0.395 ms
+-- Execution Time: 137.263 ms
+EXPLAIN ANALYZE
+SELECT *, (quantity * "price_base") AS "total price"
+FROM orders;
