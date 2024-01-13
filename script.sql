@@ -88,3 +88,7 @@ ON books(author, title);
 EXPLAIN ANALYZE
 SELECT *, (quantity * "price_base") AS "total price"
 FROM orders;
+
+-- Create an index to speed this query up (recall, total price is quantity * price_base).
+CREATE INDEX orders_total_price_idx
+ON orders((quantity * price_base));
