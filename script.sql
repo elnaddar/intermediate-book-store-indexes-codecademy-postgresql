@@ -50,3 +50,9 @@ SELECT * FROM customers LIMIT 10;
 CLUSTER customers USING customers_pkey;
 
 SELECT * FROM customers LIMIT 10;
+
+
+-- # No secondary lookup
+-- Regular searches are done on the combination of customer_id and book_id on the orders table. You have determined (through testing) that this would be a good candidate to build a multicolumn index on. Let’s build this index!
+CREATE INDEX orders_customer_id_book_id_idx
+ON orders(customer_id, book_id);
